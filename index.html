@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple HTML Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 5px;
+            height: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>HTML Interface</h1>
+    <h4 id="output"></h4>
+
+    
+    <div id="saveWrap">
+
+        <!-- インプットボックス -->
+        <input type="text" id="Box_name" placeholder="name" style="width: 300px; margin-left: 10px;">
+        <input type="text" id="Box_price" placeholder="price" style="width: 300px; margin-left: 10px;">
+        <label><input type="checkbox" id="Box_isEarning" name="isEarning" value="isEarning"> is earning</label>
+        <input type="text" id="Box_beforePrice" placeholder="beforePrice" style="width: 300px; margin-left: 10px;">
+        <input type="text" id="Box_resultPrice" placeholder="resultPrice" style="width: 300px; margin-left: 10px;">
+        <input type="text" id="Box_from" placeholder="from" style="width: 300px; margin-left: 10px;">
+        <input type="text" id="Box_to" placeholder="to" style="width: 300px; margin-left: 10px;">
+
+        <!-- 保存ボタン -->
+        <button id="saveButton">save</button>
+
+        <!-- 削除ボタン -->
+        <button id="deleteButton">delete</button>
+    </div>
+
+
+    <!-- テーブル -->
+    <h2>Price</h2>
+    <table id="resultTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Date</th>
+                <th>IsEarning</th>
+                <th>BeforePrice</th>
+                <th>ResultPrice</th>
+                <th>from</th>
+                <th>to</th>
+            </tr>
+        </thead>
+        <tbody id="dataRows">
+            <!-- Data rows will be inserted dynamically -->
+        </tbody>
+    </table>
+
+    <script src="MTransaction.js"></script>
+</body>
+</html>
