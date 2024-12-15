@@ -1,5 +1,3 @@
-
-
 //今日の日付を返却する関数
 function getTodayDate() {
     const today = new Date(); // 現在の日付と時刻を取得
@@ -34,6 +32,15 @@ function inputDataAllDelete(){
     document.getElementById("Box_resultPrice").value = "";
     document.getElementById("Box_from").value = "";
     document.getElementById("Box_to").value = "";
+}
+
+//保存データの取得とページ読み込み
+function loadTable(){
+    // localStorageからデータを取得
+    const value = localStorage.getItem("saveData");
+    const array = JSON.parse(value);
+    // データを表示
+    displayData(array);
 }
 
 //saveボタンを押下
@@ -93,16 +100,22 @@ document.getElementById("deleteButton").addEventListener("click", ()=>{
     document.getElementById("output").textContent = "All data deleted.";
 })
 
-//保存データの取得とページ読み込み
-function loadTable(){
-    // localStorageからデータを取得
-    const value = localStorage.getItem("saveData");
-    const array = JSON.parse(value);
-    // データを表示
-    displayData(array);
-}
-
 // 保存データの取得とページ読み込み時の表示
 window.addEventListener("load", () => {
     loadTable();
+    //すでに保存しているデータの取得
+    const values = localStorage.getItem("saveData");
+    let price = 0;
+    //もしデータが入っているとき - 格納済みのデータとインプット内容を保存
+    if(values){
+        let parsedData = JSON.parse(values);
+        for(let i = 0;i < parsedData.length;i++){
+            if(parsedData[i].IsEarning)
+                price += parseFloat(parsedData[i].Price) || 0;
+            else{
+                price -= parseFloat(parsedData[i].Price) || 0;
+            }
+        }
+    document.getElementById("realTimeMoneyAmount").textContent = "Amount : " + price;
+    }
 });
