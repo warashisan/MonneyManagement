@@ -18,8 +18,38 @@ function displayData(data) {
             cell.textContent = value;
             row.appendChild(cell);
         });
+
+        // 削除ボタン追加
+        const actionsCell = document.createElement('td');
+        const editButton = document.createElement('button');
+        editButton.textContent = "Delete";
+        editButton.className = "Delete-button";
+        editButton.addEventListener('click', () => {
+            DeleteRecord(item.Id);
+        });
+        actionsCell.appendChild(editButton);
+        row.appendChild(actionsCell);
+
         tableBody.appendChild(row);
     });
+}
+
+// レコード削除機能
+function DeleteRecord(id) {
+    const value = localStorage.getItem("saveData");
+    if (!value) return;
+
+    let parsedData = JSON.parse(value);
+    const records = parsedData.filter(item => item.Id !== id);
+    document.getElementById("output").textContent = records;
+    if (!records) return;
+    //確認のポップアップを表示
+    if (!confirm('Are you sure you want to delete data?')) {
+        return;
+    }
+
+    localStorage.setItem("saveData", JSON.stringify(records));
+    loadTable();
 }
 
 //インプットボックスのクリア関数
@@ -28,10 +58,7 @@ function inputDataAllDelete(){
     document.getElementById("Box_name").value = "";
     document.getElementById("Box_price").value = "";
     document.getElementById("Box_isEarning").checked = false;
-    document.getElementById("Box_beforePrice").value = "";
-    document.getElementById("Box_resultPrice").value = "";
-    document.getElementById("Box_from").value = "";
-    document.getElementById("Box_to").value = "";
+    document.getElementById("Status").value = "Set";
 }
 
 //保存データの取得とページ読み込み
@@ -51,12 +78,9 @@ document.getElementById("saveButton").addEventListener("click", ()=>{
         Id:Date.now(),
         Name : document.getElementById("Box_name").value,
         Price : document.getElementById("Box_price").value,
-        Date : getTodayDate(),
+        Date : document.getElementById("calendar").value,
         IsEarning : document.getElementById("Box_isEarning").checked,
-        BeforePrice : document.getElementById("Box_beforePrice").value,
-        ResultPrice : document.getElementById("Box_resultPrice").value,
-        from : document.getElementById("Box_from").value,
-        to : document.getElementById("Box_to").value,
+        status : document.getElementById("Status").value
     }
     
     //データ保存処理
@@ -96,7 +120,6 @@ document.getElementById("deleteButton").addEventListener("click", ()=>{
         return;
     }
     localStorage.removeItem("saveData");
-    document.getElementById("dataRows").innerHTML = "";
     document.getElementById("output").textContent = "All data deleted.";
 })
 

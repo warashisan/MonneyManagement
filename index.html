@@ -30,20 +30,24 @@
     <div id="saveWrap">
 
         <!-- インプットボックス -->
-        <input type="text" id="ID" placeholder="id" style="width: 300px; margin-left: 10px;">
         <input type="text" id="Box_name" placeholder="name" style="width: 300px; margin-left: 10px;">
         <input type="text" id="Box_price" placeholder="price" style="width: 300px; margin-left: 10px;">
+        <!-- カレンダー -->
+        <label for="calendar">Select Date: </label>
+        <input type="date" id="calendar" style="margin-bottom: 20px;">
         <label><input type="checkbox" id="Box_isEarning" name="isEarning" value="isEarning"> is earning</label>
-        <input type="text" id="Box_beforePrice" placeholder="beforePrice" style="width: 300px; margin-left: 10px;">
-        <input type="text" id="Box_resultPrice" placeholder="resultPrice" style="width: 300px; margin-left: 10px;">
-        <input type="text" id="Box_from" placeholder="from" style="width: 300px; margin-left: 10px;">
-        <input type="text" id="Box_to" placeholder="to" style="width: 300px; margin-left: 10px;">
+        <!-- ドロップダウン -->
+        <label for="Status">Status: </label>
+        <select id="Status" style="margin-left: 10px;">
+            <option value="set">Set</option>
+            <option value="temp">Temp</option>
+        </select>
 
         <!-- 保存ボタン -->
         <button id="saveButton">save</button>
 
         <!-- 削除ボタン -->
-        <button id="deleteButton">delete</button>
+        <button id="deleteButton">all delete</button>
     </div>
 
 
@@ -57,10 +61,7 @@
                 <th>Price</th>
                 <th>Date</th>
                 <th>IsEarning</th>
-                <th>BeforePrice</th>
-                <th>ResultPrice</th>
-                <th>from</th>
-                <th>to</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody id="dataRows">
