@@ -1,3 +1,5 @@
+
+
 //今日の日付を返却する関数
 function getTodayDate() {
     const today = new Date(); // 現在の日付と時刻を取得
@@ -8,30 +10,48 @@ function getTodayDate() {
 }
 
 // JSONデータをテーブルに表示
-function displayData(data) {
-    const tableBody = document.getElementById('dataRows');
-    tableBody.innerHTML = ""; // 古い行をクリア
-    data.forEach(item => {
-        const row = document.createElement('tr');
-        Object.values(item).forEach(value => {
-            const cell = document.createElement('td');
-            cell.textContent = value;
-            row.appendChild(cell);
-        });
+function displayData() {
 
-        // 削除ボタン追加
-        const actionsCell = document.createElement('td');
-        const editButton = document.createElement('button');
-        editButton.textContent = "Delete";
-        editButton.className = "Delete-button";
-        editButton.addEventListener('click', () => {
-            DeleteRecord(item.Id);
+    // localStorageからデータを取得
+    const value = localStorage.getItem("saveData");
+    if(value){
+        const data = JSON.parse(value);
+        let price = 0;
+        //合計金額取得処理
+        for(let i = 0;i < data.length;i++){
+            if(data[i].IsEarning)
+                price += parseFloat(data[i].Price) || 0;
+            else{
+                price -= parseFloat(data[i].Price) || 0;
+            }
+        }
+    
+        //レコードの追加
+        const tableBody = document.getElementById('dataRows');
+        tableBody.innerHTML = ""; // 古い行をクリア
+        data.forEach(item => {
+            const row = document.createElement('tr');
+            Object.values(item).forEach(value => {
+                    const cell = document.createElement('td');
+                    cell.textContent = value;
+                    row.appendChild(cell);
+            });
+    
+            // 削除ボタン追加
+            const actionsCell = document.createElement('td');
+            const editButton = document.createElement('button');
+            editButton.textContent = "Delete";
+            editButton.className = "Delete-button";
+            editButton.addEventListener('click', () => {
+                DeleteRecord(item.Id);
+            });
+            actionsCell.appendChild(editButton);
+            row.appendChild(actionsCell);
+    
+            tableBody.appendChild(row);
         });
-        actionsCell.appendChild(editButton);
-        row.appendChild(actionsCell);
-
-        tableBody.appendChild(row);
-    });
+        document.getElementById('realTimeMoneyAmount').innerText  = `TotalAmount : ${price}`;   
+    }
 }
 
 // レコード削除機能
@@ -49,7 +69,7 @@ function DeleteRecord(id) {
     }
 
     localStorage.setItem("saveData", JSON.stringify(records));
-    loadTable();
+    displayData();
 }
 
 //インプットボックスのクリア関数
@@ -59,15 +79,6 @@ function inputDataAllDelete(){
     document.getElementById("Box_price").value = "";
     document.getElementById("Box_isEarning").checked = false;
     document.getElementById("Status").value = "Set";
-}
-
-//保存データの取得とページ読み込み
-function loadTable(){
-    // localStorageからデータを取得
-    const value = localStorage.getItem("saveData");
-    const array = JSON.parse(value);
-    // データを表示
-    displayData(array);
 }
 
 //saveボタンを押下
@@ -94,13 +105,11 @@ document.getElementById("saveButton").addEventListener("click", ()=>{
             parsedData = JSON.parse(value);
             parsedData[parsedData.length] = data;
             localStorage.setItem("saveData", JSON.stringify(parsedData));
-            displayData(parsedData);
             document.getElementById("output").textContent = "Data saved successfully!";
         }
         //データが入っていないとき - インプットの内容を保存
         else{
             localStorage.setItem("saveData", JSON.stringify([data]));
-            displayData([data]);
             document.getElementById("output").textContent = "Data saved successfully!";
         }
         //インプットボックスをクリア
@@ -110,35 +119,22 @@ document.getElementById("saveButton").addEventListener("click", ()=>{
     else{
         document.getElementById("output").textContent = "No Data...";
     }
+    displayData();
 })
 
-//削除ボタンを押下
+//すべて削除するボタンを押下
 document.getElementById("deleteButton").addEventListener("click", ()=>{
 
     //確認のポップアップを表示
     if (!confirm('Are you sure you want to delete all data?')) {
         return;
     }
-    localStorage.removeItem("saveData");
+    localStorage.setItem("saveData", "[]");
     document.getElementById("output").textContent = "All data deleted.";
+    displayData();
 })
 
 // 保存データの取得とページ読み込み時の表示
 window.addEventListener("load", () => {
-    loadTable();
-    //すでに保存しているデータの取得
-    const values = localStorage.getItem("saveData");
-    let price = 0;
-    //もしデータが入っているとき - 格納済みのデータとインプット内容を保存
-    if(values){
-        let parsedData = JSON.parse(values);
-        for(let i = 0;i < parsedData.length;i++){
-            if(parsedData[i].IsEarning)
-                price += parseFloat(parsedData[i].Price) || 0;
-            else{
-                price -= parseFloat(parsedData[i].Price) || 0;
-            }
-        }
-    document.getElementById("realTimeMoneyAmount").textContent = "Amount : " + price;
-    }
+    displayData();
 });
