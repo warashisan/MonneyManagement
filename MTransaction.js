@@ -51,7 +51,40 @@ function displayData() {
             tableBody.appendChild(row);
         });
         document.getElementById('realTimeMoneyAmount').innerText  = `TotalAmount : ${price}`;   
+
+        //エラーハンドラー解消
+        const errorElements = document.querySelectorAll('.error');
+
+        errorElements.forEach(element => {
+            element.classList.remove('error');
+        });
     }
+}
+
+//エラーハンドラー
+function errorHandler(_name, _price, _calendar){
+        //インプットにデータが入っていない
+        if(_name == ""){
+            document.getElementById("output").textContent = "No Data...";
+    
+            const input_box = document.getElementById("Box_name");
+            input_box.classList.add("error"); // エラー時に赤くする
+            return true;
+        }
+        else if(_price == ""){
+            document.getElementById("output").textContent = "No Data...";
+    
+            const input_box = document.getElementById("Box_price");
+            input_box.classList.add("error"); // エラー時に赤くする
+            return true;
+        }
+        else if(_calendar == ""){
+            document.getElementById("output").textContent = "No Data...";
+    
+            const input_box = document.getElementById("calendar");
+            input_box.classList.add("error"); // エラー時に赤くする
+            return true;
+        }
 }
 
 // レコード削除機能
@@ -85,7 +118,7 @@ function inputDataAllDelete(){
 document.getElementById("saveButton").addEventListener("click", ()=>{
     
     //inputボックスの値を取得
-    const data ={
+    const data = {
         Id:Date.now(),
         Name : document.getElementById("Box_name").value,
         Price : document.getElementById("Box_price").value,
@@ -93,32 +126,30 @@ document.getElementById("saveButton").addEventListener("click", ()=>{
         IsEarning : document.getElementById("Box_isEarning").checked,
         status : document.getElementById("Status").value
     }
-    
-    //データ保存処理
-    if(data.Name != ""){
 
-        //すでに保存しているデータの取得
-        const value = localStorage.getItem("saveData");
-        
-        //もしデータが入っているとき - 格納済みのデータとインプット内容を保存
-        if(value){
-            parsedData = JSON.parse(value);
-            parsedData[parsedData.length] = data;
-            localStorage.setItem("saveData", JSON.stringify(parsedData));
-            document.getElementById("output").textContent = "Data saved successfully!";
-        }
-        //データが入っていないとき - インプットの内容を保存
-        else{
-            localStorage.setItem("saveData", JSON.stringify([data]));
-            document.getElementById("output").textContent = "Data saved successfully!";
-        }
-        //インプットボックスをクリア
-        inputDataAllDelete();
+    //error handler
+    if(errorHandler(data.Name, data.Price, data._calendar)){
+        return;
     }
-    //インプットにデータが入っていない
+    
+    //すでに保存しているデータの取得
+    const value = localStorage.getItem("saveData");
+    
+    //もしデータが入っているとき - 格納済みのデータとインプット内容を保存
+    if(value){
+        parsedData = JSON.parse(value);
+        parsedData[parsedData.length] = data;
+        localStorage.setItem("saveData", JSON.stringify(parsedData));
+        document.getElementById("output").textContent = "Data saved successfully!";
+    }
+    //データが入っていないとき - インプットの内容を保存
     else{
-        document.getElementById("output").textContent = "No Data...";
+        localStorage.setItem("saveData", JSON.stringify([data]));
+        document.getElementById("output").textContent = "Data saved successfully!";
     }
+    //インプットボックスをクリア
+    inputDataAllDelete();
+
     displayData();
 })
 
