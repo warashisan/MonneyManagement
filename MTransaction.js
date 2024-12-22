@@ -110,6 +110,15 @@ function errorHandler(_name, _price, _calendar){
         }
 }
 
+//インプットボックスのクリア関数
+function inputDataAllDelete(){
+    // Clear input fields after saving
+    document.getElementById("Box_name").value = "";
+    document.getElementById("Box_price").value = "";
+    document.getElementById("Box_isEarning").checked = false;
+    document.getElementById("Status").value = "Set";
+}
+
 //レコード編集
 function editTableData(id){
     const value = localStorage.getItem("saveData");
@@ -125,7 +134,7 @@ function editTableData(id){
     let count = 0;
 
     const rows = document.querySelectorAll('tbody tr'); // 全行を取得
-    rows.forEach((row,index) => {
+    rows.forEach(row => {
         const cells = row.querySelectorAll('td');
         const rowId = parseInt(cells[0].textContent.trim());
         if(rowId === id){
@@ -142,29 +151,53 @@ function editTableData(id){
                     cell.appendChild(compliteButton);
 
                     compliteButton.addEventListener('click', () => {
-                        EditRecord(
-                            index, 
-                            cells.id, 
-                            cells.name, 
-                            cells.price, 
-                            cells.date, 
-                            cells.IsEarning, 
-                            cells.status
-                        );
+                        const name = document.getElementById("recordInput1").value;
+                        const price = document.getElementById("recordInput2").value;
+                        const date = document.getElementById("recordInput3").value;
+                        const IsEarning = document.getElementById("recordInput4").value;
+                        const status = document.getElementById("recordInput5").value;
+                    
+                    //inputボックスの値を取得
+                    const data = {
+                        Id : id,
+                        Name : document.getElementById("recordInput1").value,
+                        Price : document.getElementById("recordInput2").value,
+                        Date : document.getElementById("recordInput3").value,
+                        IsEarning : document.getElementById("recordInput4").checked,
+                        status : document.getElementById("recordInput5").value
+                    }
+                        
+                        const tempRecord = [{}];
+                        records.forEach(record =>{
+                            if(record.id === parseInt(id)){
+                                tempRecord[tempRecord.length] = data;
+                            }
+                            else{
+                                tempRecord[tempRecord.length] = record;
+                            }
+                        });
+
+                        ttt(records);
+
+                        localStorage.setItem("saveData", JSON.stringify(records));
+                        displayData();
                     });
                     return;
-                };
-                if(deleteButton){
-                    return;
                 }
+                if(deleteButton)return;
+                if(count === 0){
+                    count +=1;
+                    return;
+                };
 
                 //cellに入れ込む用の箱作成
                 const cellText = cell.textContent.trim();
                 const cellInput = document.createElement('input');
                 cellInput.type = 'text';
+                cellInput.id = 'recordInput' + count;
                 cellInput.value = cellText;
-
-                count += 1;
+                count +=1;
+                
                 //cellにセット
                 cell.textContent = '';
                 cell.appendChild(cellInput);
@@ -187,17 +220,6 @@ function DeleteRecord(id) {
     }
 
     localStorage.setItem("saveData", JSON.stringify(records));
-    displayData();
-}
-
-function EditRecord(recordNum, id, name, price, date, IsEarning, status){
-    const value = localStorage.getItem("saveData");
-    if (!value) return;
-
-    let parsedData = JSON.parse(value);
-    const editData = parsedData.splice(recordNum, 1, {id,name,price,date,IsEarning,status})
-
-    localStorage.setItem("saveData", JSON.stringify(editData));
     displayData();
 }
 
