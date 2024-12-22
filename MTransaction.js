@@ -1,4 +1,12 @@
-
+function ttt(text){
+    if(text){
+        
+        document.getElementById("output").textContent = text;
+    }
+    else{
+        document.getElementById("output").textContent ="--------------------";
+    }
+}
 
 //今日の日付を返却する関数
 function getTodayDate() {
@@ -37,19 +45,34 @@ function displayData() {
                     row.appendChild(cell);
             });
     
-            // 削除ボタン追加
-            const actionsCell = document.createElement('td');
+            // 編集ボタン追加
+            const EditActionsCell = document.createElement('td');
             const editButton = document.createElement('button');
-            editButton.textContent = "Delete";
-            editButton.className = "Delete-button";
+            editButton.textContent = "Edit";
+            editButton.className = "Edit-button";
+            
             editButton.addEventListener('click', () => {
+                editTableData(item.Id);
+            });
+            EditActionsCell.appendChild(editButton);
+            row.appendChild(EditActionsCell);
+
+            // 削除ボタン追加
+            const deleteActionCell = document.createElement('td');
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = "Delete";
+            deleteButton.className = "Delete-button";
+            
+            deleteButton.addEventListener('click', () => {
                 DeleteRecord(item.Id);
             });
-            actionsCell.appendChild(editButton);
-            row.appendChild(actionsCell);
+            deleteActionCell.appendChild(deleteButton);
+            row.appendChild(deleteActionCell);
     
             tableBody.appendChild(row);
         });
+
+        //現在の所持金を表示
         document.getElementById('realTimeMoneyAmount').innerText  = `TotalAmount : ${price}`;   
 
         //エラーハンドラー解消
@@ -87,14 +110,76 @@ function errorHandler(_name, _price, _calendar){
         }
 }
 
-// レコード削除機能
+//レコード編集
+function editTableData(id){
+    const value = localStorage.getItem("saveData");
+    if (!value) return;
+    let parsedData = JSON.parse(value);
+    
+    const records = parsedData.filter(item => item.Id === id);
+    if(!records){
+        alert("対象のレコードが見つかりません。");
+        return;
+    }
+
+    let count = 0;
+
+    const rows = document.querySelectorAll('tbody tr'); // 全行を取得
+    rows.forEach((row,index) => {
+        const cells = row.querySelectorAll('td');
+        const rowId = parseInt(cells[0].textContent.trim());
+        if(rowId === id){
+            cells.forEach(cell => {
+                const editButton = cell.querySelector('.Edit-button');
+                const deleteButton = cell.querySelector('.Delete-button');
+                if(editButton){
+                    //編集ボタンを編集完了ボタンに置き換え
+                    const compliteButton = document.createElement('button');
+                    compliteButton.textContent = "Complite";
+                    compliteButton.className = "Complite-button";
+
+                    cell.removeChild(editButton);
+                    cell.appendChild(compliteButton);
+
+                    compliteButton.addEventListener('click', () => {
+                        EditRecord(
+                            index, 
+                            cells.id, 
+                            cells.name, 
+                            cells.price, 
+                            cells.date, 
+                            cells.IsEarning, 
+                            cells.status
+                        );
+                    });
+                    return;
+                };
+                if(deleteButton){
+                    return;
+                }
+
+                //cellに入れ込む用の箱作成
+                const cellText = cell.textContent.trim();
+                const cellInput = document.createElement('input');
+                cellInput.type = 'text';
+                cellInput.value = cellText;
+
+                count += 1;
+                //cellにセット
+                cell.textContent = '';
+                cell.appendChild(cellInput);
+            });
+        }
+    });
+}
+
+// レコード削除
 function DeleteRecord(id) {
     const value = localStorage.getItem("saveData");
     if (!value) return;
 
     let parsedData = JSON.parse(value);
     const records = parsedData.filter(item => item.Id !== id);
-    document.getElementById("output").textContent = records;
     if (!records) return;
     //確認のポップアップを表示
     if (!confirm('Are you sure you want to delete data?')) {
@@ -105,13 +190,15 @@ function DeleteRecord(id) {
     displayData();
 }
 
-//インプットボックスのクリア関数
-function inputDataAllDelete(){
-    // Clear input fields after saving
-    document.getElementById("Box_name").value = "";
-    document.getElementById("Box_price").value = "";
-    document.getElementById("Box_isEarning").checked = false;
-    document.getElementById("Status").value = "Set";
+function EditRecord(recordNum, id, name, price, date, IsEarning, status){
+    const value = localStorage.getItem("saveData");
+    if (!value) return;
+
+    let parsedData = JSON.parse(value);
+    const editData = parsedData.splice(recordNum, 1, {id,name,price,date,IsEarning,status})
+
+    localStorage.setItem("saveData", JSON.stringify(editData));
+    displayData();
 }
 
 //saveボタンを押下
