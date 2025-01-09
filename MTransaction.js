@@ -31,10 +31,12 @@ function displayData() {
         tableBody.innerHTML = ""; // 古い行をクリア
         data.forEach(item => {
             const row = document.createElement('tr');
-            Object.values(item).forEach(value => {
-                    const cell = document.createElement('td');
-                    cell.textContent = value;
-                    row.appendChild(cell);
+            // Idフィールドを除外してループ
+            Object.entries(item).forEach(([key, value]) => {
+                if (key === "Id") return; // Idだけをスキップ
+                const cell = document.createElement('td');
+                cell.textContent = value;
+                row.appendChild(cell);
             });
     
             // 削除ボタン追加
@@ -62,7 +64,7 @@ function displayData() {
 }
 
 //エラーハンドラー
-function errorHandler(_name, _price, _calendar){
+function errorHandler(_name, _price, _calendar,_Status){
         //インプットにデータが入っていない
         if(_name == ""){
             document.getElementById("output").textContent = "No Data...";
@@ -85,6 +87,13 @@ function errorHandler(_name, _price, _calendar){
             input_box.classList.add("error"); // エラー時に赤くする
             return true;
         }
+        else if(_Status == ""){
+            document.getElementById("output").textContent = "No Data...";
+    
+            const input_box = document.getElementById("Status");
+            input_box.classList.add("error"); // エラー時に赤くする
+            return true;
+        }
 }
 
 // レコード削除機能
@@ -93,16 +102,22 @@ function DeleteRecord(id) {
     if (!value) return;
 
     let parsedData = JSON.parse(value);
+    let record_id = parsedData.filter(item => item.Id === id);
     const records = parsedData.filter(item => item.Id !== id);
-    document.getElementById("output").textContent = records;
     if (!records) return;
-    //確認のポップアップを表示
-    if (!confirm('Are you sure you want to delete data?')) {
-        return;
+    //レコード削除
+    if(record_id[0].status === "temporary"){
+        localStorage.setItem("saveData", JSON.stringify(records));
+        displayData();
     }
-
-    localStorage.setItem("saveData", JSON.stringify(records));
-    displayData();
+    else{
+        //確認のポップアップを表示
+        if (!confirm('Are you sure you want to delete data?')) {
+            return;
+        }
+        localStorage.setItem("saveData", JSON.stringify(records));
+        displayData();
+    }
 }
 
 //インプットボックスのクリア関数
@@ -128,7 +143,7 @@ document.getElementById("saveButton").addEventListener("click", ()=>{
     }
 
     //error handler
-    if(errorHandler(data.Name, data.Price, data._calendar)){
+    if(errorHandler(data.Name, data.Price, data._calendar,data.status)){
         return;
     }
     

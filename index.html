@@ -4,27 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple HTML Interface</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid #ccc;
-        }
-        th, td {
-            padding: 5px;
-            height: 10px;
-        }
-        .error {
-            background-color: #f8d7da;
-            border-color: #ff243a;
-        }
-    </style>
+    <link rel="stylesheet" href="CSS.css">
 </head>
 <body>
     <h1 id="realTimeMoneyAmount">現在の金額：</h1>
@@ -35,24 +15,30 @@
     <div id="saveWrap">
 
         <!-- インプットボックス -->
-        <input type="text" id="Box_name" placeholder="name" style="width: 300px; margin-left: 10px;">
-        <input type="text" id="Box_price" placeholder="price" style="width: 300px; margin-left: 10px;">
+        <div><input type="text" id="Box_name" placeholder="name" style="width: 300px; margin-left: 10px;"></div>
+        <div><input type="text" id="Box_price" placeholder="price" style="width: 300px; margin-left: 10px;"></div>
         <!-- カレンダー -->
-        <label for="calendar">Select Date: </label>
-        <input type="date" id="calendar" style="margin-bottom: 20px;">
-        <label><input type="checkbox" id="Box_isEarning" name="isEarning" value="isEarning"> is earning</label>
+        <div><label for="calendar">Select Date: </label>
+            <input type="date" id="calendar" style="margin-bottom: 20px;">
+        </div>
+        <div><label><input type="checkbox" id="Box_isEarning" name="isEarning" value="isEarning"> IsEarning</label></div>
         <!-- ドロップダウン -->
-        <label for="Status">Status: </label>
-        <select id="Status" style="margin-left: 10px;">
-            <option value="set">Set</option>
-            <option value="temp">Temp</option>
-        </select>
+        <div>
+            <label for="Status">Status: </label>
+            <select id="Status" style="margin-left: 10px;">
+                <option value="set">Set</option>
+                <option value="fix">Fix</option>
+                <option value="temporary">Temporary</option>
+            </select>
+        </div>
 
-        <!-- 保存ボタン -->
-        <button id="saveButton">save</button>
+        <div id = "ButtonBox">
+            <!-- 保存ボタン -->
+            <button id="saveButton">save</button>
 
-        <!-- 削除ボタン -->
-        <button id="deleteButton">all delete</button>
+            <!-- 削除ボタン -->
+            <button id="deleteButton">all delete</button>
+        </div>
     </div>
 
 
@@ -62,7 +48,6 @@
     <table id="resultTable">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Name</th>
                 <th>Price</th>
                 <th>Date</th>
