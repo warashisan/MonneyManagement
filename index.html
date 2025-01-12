@@ -1,50 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple HTML Interface</title>
     <link rel="stylesheet" href="CSS.css">
+    <link rel="icon" href="https://warashisan.github.io/Resource/Image/favicon.ico">
 </head>
 <body>
-    <h1 id="realTimeMoneyAmount">現在の金額：</h1>
-    <h4 id="output"></h4>
-    <h4 id="test"></h4>
-
-    
-    <div id="saveWrap">
-
-        <!-- インプットボックス -->
-        <div><input type="text" id="Box_name" placeholder="name" style="width: 300px; margin-left: 10px;"></div>
-        <div><input type="text" id="Box_price" placeholder="price" style="width: 300px; margin-left: 10px;"></div>
-        <!-- カレンダー -->
-        <div><label for="calendar">Select Date: </label>
-            <input type="date" id="calendar" style="margin-bottom: 20px;">
+    <div id="header1">
+        <div id="currentDate">
+            <button id="backMonth"></button>
+            <h1 id="CurrentDateTime">aaa</h1>
+            <button id="nextMonth"></button>
         </div>
-        <div><label><input type="checkbox" id="Box_isEarning" name="isEarning" value="isEarning"> IsEarning</label></div>
-        <!-- ドロップダウン -->
-        <div>
-            <label for="Status">Status: </label>
-            <select id="Status" style="margin-left: 10px;">
-                <option value="set">Set</option>
-                <option value="fix">Fix</option>
-                <option value="temporary">Temporary</option>
-            </select>
+        <div id="title">
+            <h2>Amount : </h2>
+            <h2 id="realTimeMoneyAmount"></h2>
         </div>
+    </div>
 
-        <div id = "ButtonBox">
-            <!-- 保存ボタン -->
-            <button id="saveButton">save</button>
+    <div id="header2">
+        <h4 id="output"></h4>
+        <div id="saveWrap">
 
-            <!-- 削除ボタン -->
-            <button id="deleteButton">all delete</button>
+            <!-- インプットボックス -->
+            <div><input type="text" id="Box_name" placeholder="name" style="width: 300px; margin-left: 10px;">
+            <input type="text" id="Box_price" placeholder="price" style="width: 300px; margin-left: 10px;"></div>
+            <!-- カレンダー -->
+            <div><label for="calendar">Select Date: </label>
+                <input type="date" id="calendar">
+                <label><input type="checkbox" id="Box_isEarning" name="isEarning" value="isEarning"> IsEarning</label>
+            </div>
+            <!-- ドロップダウン -->
+            <div>
+                <label for="Status">Status: </label>
+                <select id="Status">
+                    <option value="set">Set</option>
+                    <option value="fix">Fix</option>
+                    <option value="temporary">Temporary</option>
+                </select>
+                <!-- 保存ボタン -->
+                <button id="saveButton">save</button>
+                <!-- 削除ボタン -->
+                <button id="deleteButton">all delete</button>
+            </div>
         </div>
     </div>
 
 
     <!-- テーブル -->
-    <h2>Price</h2>
-    <label><input type="checkbox" id="Filter_"></label>
     <table id="resultTable">
         <thead>
             <tr>
@@ -60,6 +65,6 @@
         </tbody>
     </table>
 
-    <script src="MTransaction.js"></script>
+    <script src="MTransaction.js" charset="UTF-8"></script>
 </body>
 </html>
