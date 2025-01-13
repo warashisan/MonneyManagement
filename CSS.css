@@ -133,6 +133,7 @@ label{
     background-color: white;
     border-radius: 10px;
     box-shadow: 0px 0px 3px 1px gray;
+    overflow: scroll;
 }
 .popup > .close-button{
     /*position size*/
