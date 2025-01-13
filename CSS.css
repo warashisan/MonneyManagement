@@ -1,16 +1,16 @@
 body {
     font-family: Arial, sans-serif;
-    font-size: 20px;
+    font-size: 15px;
     height: 100vh;     
     margin-top: 120px;
 }
 h1{
-    font-size: 30px;
+    font-size: 25px;
     margin: 20px 0px 0px 0px;
     color: darkcyan;
 }
 h2{
-    font-size: 30px;
+    font-size: 25px;
     margin: 0px 0px 0px 0px;
 }
 #header1{
@@ -52,13 +52,13 @@ input::placeholder{
 }
 table, th, td {
     border: 1px solid #ccc;
-    height: 40px;
+    height: 30px;
 }
 th, td {
     padding: 5px;
 }
 input{
-    height: 40px;
+    height: 30px;
 }
 input[type="checkbox"]{
     height: 30px;
@@ -68,11 +68,11 @@ label{
     padding: 10px;
     cursor: pointer;
 }
-#saveButton{
-    margin: 0px 0px 0px 20px;
-}
-#deleteButton{
-    margin: 0px 0px 0px 20px;
+.Button{
+    margin: 0px 0px 0px 10px;
+    border: 2px;
+    border-color: black;
+    border-radius: 5px;
 }
 .error {
     border-color: #ff243a;
@@ -103,3 +103,75 @@ label{
     justify-content: left;
     align-items: center;
 }
+/*popup template design*/
+.popup-background{
+    /*position size*/
+    position: fixed;
+    z-index : 100;
+    top : 0;
+    left : 0;
+    height : 100vh;
+    width : 100vw;
+
+    /*design*/
+    background-color: gray;
+    opacity : 0.5
+}
+.popup{
+    /*position size*/
+    --height : 60%;
+    --width : 60%;
+    z-index : 101;
+    position: fixed;
+    top : calc(50vh - calc(var(--height) / 2));
+    left : calc(50vw - calc(var(--width) / 2));
+    height : var(--height);
+    width : var(--width);
+
+    /*design*/
+    overflow: hidden;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 3px 1px gray;
+}
+.popup > .close-button{
+    /*position size*/
+    --size : 20px;
+    position:absolute;
+    top : calc(var(--size)/3);
+    left : calc(90%);/*css variables are available in children*/
+    height : var(--size);
+    width : var(--size);
+
+    /*design*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    color : gray;
+    font-size: var(--size);
+    border-radius: calc(var(--size)/5);
+}
+.popup > .close-button:hover{
+    /*design*/
+    background-color: red;
+    color : white;
+}
+.popup > .content{
+    padding: 10px;
+    text-align: center;
+}
+/*hide popup*/
+.popup-flag{
+    display:none;
+}
+.popup-flag:not(:checked) + .popup-background{
+    display:none;
+}
+.popup-flag:not(:checked) + * + .popup{
+    display:none;
+}
+#TemplateTable{
+    margin-top: 10px;
+}
+

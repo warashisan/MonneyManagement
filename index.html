@@ -25,8 +25,16 @@
         <div id="saveWrap">
 
             <!-- インプットボックス -->
-            <div><input type="text" id="Box_name" placeholder="name" style="width: 300px; margin-left: 10px;">
-            <input type="text" id="Box_price" placeholder="price" style="width: 300px; margin-left: 10px;"></div>
+            <div>
+                <div>
+                    <!--name-->
+                    <input type="text" id="Box_name" placeholder="name" style="width: 200px; margin-left: 10px;">
+                    <!--popupButton-->
+                    <label class="Button" for="popupFlag">Template</label>
+                </div>
+                <!--price-->
+                <input type="text" id="Box_price" placeholder="price" style="width: 300px; margin-left: 10px;">
+            </div>
             <!-- カレンダー -->
             <div><label for="calendar">Select Date: </label>
                 <input type="date" id="calendar">
@@ -41,13 +49,29 @@
                     <option value="temporary">Temporary</option>
                 </select>
                 <!-- 保存ボタン -->
-                <button id="saveButton">save</button>
+                <button id="saveButton" class="Button">save</button>
                 <!-- 削除ボタン -->
-                <button id="deleteButton">all delete</button>
+                <button id="deleteButton" class="Button">all delete</button>
             </div>
         </div>
     </div>
 
+    <!--popup-->
+    <input type="checkbox" class="popup-flag" id="popupFlag">
+    <label class="popup-background" for="popupFlag"></label>
+    <div class="popup">
+        <label class="close-button" for="popupFlag">x</label>
+        <div class="content">
+            <h2>Template</h2>
+            <input type="text" id="Box_name_temp" placeholder="name" style="width: 200px; margin-left: 10px;">
+            <button id="nameSaveButton" class="Button">Save</button>
+            <!-- テーブル -->
+            <table id="TemplateTable">
+                <thead><tr><th>name</th></tr></thead>
+                <tbody id="TemplateTable_dataRows"></tbody>
+            </table>
+        </div>
+    </div> 
 
     <!-- テーブル -->
     <table id="resultTable">

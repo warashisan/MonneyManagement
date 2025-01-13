@@ -20,6 +20,8 @@ function infini(){
     //データ取得キーの保存
     saveDataKey = `${year}${month}savedata`;
     document.getElementById('CurrentDateTime').textContent = `---- year:${year} - month:${month} ----`;
+
+    displayTemplateName();
 }
 
 //今日の日付を返却する関数
@@ -153,6 +155,60 @@ function inputDataAllDelete(){
     document.getElementById("Status").value = "Set";
 }
 
+//テンプレートの表示
+function displayTemplateName() {
+    const tableBody = document.getElementById('TemplateTable_dataRows');
+
+    // テーブルのリセット（重複回避）
+    tableBody.innerHTML = "";
+    
+    // ローカルストレージからデータ取得または初期化
+    let nameList = JSON.parse(localStorage.getItem("TemplateData")) || [];
+    localStorage.setItem("TemplateData", JSON.stringify(nameList));
+
+    // 最新データをテーブルに反映
+    nameList.forEach((item, index) => {
+        const row = document.createElement('tr');
+        
+        // nameボタンのセル作成
+        const actionsCellName = document.createElement('td');
+        const NameButton = document.createElement('button');
+        NameButton.textContent = item;
+        NameButton.className = "Button";
+
+        // nameボタンのイベント設定
+        NameButton.addEventListener('click', () => {
+            document.getElementById("Box_name").value = item;
+            document.getElementById("popupFlag").checked = false; 
+        });
+
+        actionsCellName.appendChild(NameButton);
+        row.appendChild(actionsCellName);
+
+        // テーブルに行を追加
+        tableBody.appendChild(row);
+
+        // 削除ボタンのセル作成
+        const actionsCell = document.createElement('td');
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = "Delete";
+        deleteButton.className = "Button";
+
+        // 削除ボタンのイベント設定
+        deleteButton.addEventListener('click', () => {
+            nameList.splice(index, 1); // 配列から削除
+            localStorage.setItem("TemplateData", JSON.stringify(nameList));
+            row.remove(); // DOMから行を削除
+        });
+
+        actionsCell.appendChild(deleteButton);
+        row.appendChild(actionsCell);
+
+        // テーブルに行を追加
+        tableBody.appendChild(row);
+    });
+}
+
 //saveボタンを押下
 document.getElementById("saveButton").addEventListener("click", ()=>{
     
@@ -249,6 +305,71 @@ document.getElementById("backMonth").addEventListener("click", ()=>{
     document.getElementById("dataRows").textContent = "";
     displayData();
 })
+
+// テンプレートセーブ
+document.getElementById("nameSaveButton").addEventListener("click", () => {
+    const tableBody = document.getElementById('TemplateTable_dataRows');
+    const tempInput = document.getElementById("Box_name_temp").value;
+
+    // 入力が空の場合は保存しない
+    if (!tempInput.trim()) {
+        alert("input name");
+        return;
+    }
+
+    // ローカルストレージからデータ取得または初期化
+    let nameList = JSON.parse(localStorage.getItem("TemplateData")) || [];
+    nameList.push(tempInput); // 新しいデータを追加
+    localStorage.setItem("TemplateData", JSON.stringify(nameList));
+
+    // テーブルのリセット（重複回避）
+    tableBody.innerHTML = "";
+
+    // 最新データをテーブルに反映
+    nameList.forEach((item, index) => {
+        const row = document.createElement('tr');
+        
+        // nameボタンのセル作成
+        const actionsCellName = document.createElement('td');
+        const NameButton = document.createElement('button');
+        NameButton.textContent = item;
+        NameButton.className = "Button";
+
+        // nameボタンのイベント設定
+        NameButton.addEventListener('click', () => {
+            document.getElementById("Box_name").value = item;
+            document.getElementById("popupFlag").checked = false;
+        });
+
+        actionsCellName.appendChild(NameButton);
+        row.appendChild(actionsCellName);
+
+        // テーブルに行を追加
+        tableBody.appendChild(row);
+
+        // 削除ボタンのセル作成
+        const actionsCell = document.createElement('td');
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = "Delete";
+        deleteButton.className = "Delete-button";
+
+        // 削除ボタンのイベント設定
+        deleteButton.addEventListener('click', () => {
+            nameList.splice(index, 1); // 配列から削除
+            localStorage.setItem("TemplateData", JSON.stringify(nameList));
+            row.remove(); // DOMから行を削除
+        });
+
+        actionsCell.appendChild(deleteButton);
+        row.appendChild(actionsCell);
+
+        // テーブルに行を追加
+        tableBody.appendChild(row);
+    });
+
+    // 入力欄クリア
+    document.getElementById("Box_name_temp").value = "";
+});
 
 // 保存データの取得とページ読み込み時の表示
 window.addEventListener("load", () => {
